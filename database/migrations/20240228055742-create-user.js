@@ -18,9 +18,6 @@ module.exports = {
       address: {
         type: Sequelize.STRING,
       },
-      phoneNumber: {
-        type: Sequelize.STRING,
-      },
       noHome: {
         type: Sequelize.STRING,
       },
@@ -34,7 +31,12 @@ module.exports = {
         type: Sequelize.STRING,
       },
       role: {
-        type: Sequelize.ENUM(["superAdmin", "admin", "member"]),
+        type: Sequelize.ENUM([
+          "superAdmin",
+          "sekretaris",
+          "bendahara",
+          "member",
+        ]),
       },
       createdAt: {
         allowNull: false,

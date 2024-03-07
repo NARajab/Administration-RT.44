@@ -39,5 +39,14 @@ const sendWelcomeMessage = async (phoneNumber) => {
   const welcomeMessage = "Hai selamat datang! Kenalin Aku Cika bot RT.44";
   await sendTextMessage(phoneNumber, welcomeMessage);
 };
+const sendSuccessMessage = async (phoneNumber) => {
+  const welcomeMessage = "Perubahan kata sandi anda berhasil";
+  await sendTextMessage(phoneNumber, welcomeMessage);
+};
 
-module.exports = { client, sendTextMessage, sendWelcomeMessage };
+module.exports = {
+  client,
+  sendTextMessage,
+  sendWelcomeMessage,
+  sendSuccessMessage,
+};

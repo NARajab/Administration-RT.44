@@ -36,7 +36,14 @@ module.exports = (sequelize, DataTypes) => {
       placeDateBday: DataTypes.DATE,
       gender: DataTypes.STRING,
       blockHome: DataTypes.STRING,
-      role: { type: DataTypes.ENUM(["superAdmin", "admin", "member"]) },
+      role: {
+        type: DataTypes.ENUM([
+          "superAdmin",
+          "sekretaris",
+          "bendahara",
+          "member",
+        ]),
+      },
     },
     {
       sequelize,
