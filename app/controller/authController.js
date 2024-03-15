@@ -3,7 +3,9 @@ const jwt = require("jsonwebtoken");
 const { User, Auth } = require("../models");
 
 const ApiError = require("../../utils/apiError");
-const { sendSuccessMessage } = require("../../utils/sendMessage");
+const {
+  sendSuccessMessageForgotePassword,
+} = require("../../utils/sendMessage");
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -180,7 +182,7 @@ const forgotPassword = async (req, res, next) => {
       }
     );
 
-    await sendSuccessMessage(users.User.phoneNumber);
+    await sendSuccessMessageForgotePassword(users.User.phoneNumber);
 
     res.status(200).json({
       status: "Success",

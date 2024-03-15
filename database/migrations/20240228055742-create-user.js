@@ -30,6 +30,9 @@ module.exports = {
       blockHome: {
         type: Sequelize.STRING,
       },
+      image: {
+        type: Sequelize.STRING,
+      },
       role: {
         type: Sequelize.ENUM([
           "superAdmin",

@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
-
+const path = require("path");
 const { User, Auth } = require("../models");
 const { Op, where } = require("sequelize");
 
+const { sendSuccessMessageUpdateProfile } = require("../../utils/sendMessage");
+const imagekit = require("../libs/imagekit");
 const ApiError = require("../../utils/apiError");
 
 const getAllUsers = async (req, res, next) => {
@@ -104,23 +106,40 @@ const updateUser = async (req, res, next) => {
       id,
     },
   });
+
   const userBody = req.body;
+  const file = req.file;
   const condition = {
     where: {
       id,
-      retuning: true,
     },
+    returning: true,
   };
+  let image;
   try {
     if (!user) {
       return next(new ApiError("Pengguna tidak ditemukan", 404));
     }
 
-    const updateUser = await User.update(...userBody, condition);
+    if (file) {
+      const filename = file.originalname;
+      const extension = path.extname(filename);
+      const uploadImage = await imagekit.upload({
+        file: file.buffer,
+        fileName: `IMG-${Date.now()}.${extension}`,
+      });
+      image = uploadImage.url;
+    }
+
+    const [_, [updatedUserData]] = await User.update(
+      { ...userBody, image },
+      condition
+    );
+    const updatedUser = updatedUserData.toJSON();
 
     res.status(200).json({
       status: "Success",
-      updateUser,
+      data: updatedUser,
     });
   } catch (err) {
     next(new ApiError(err.message, 500));

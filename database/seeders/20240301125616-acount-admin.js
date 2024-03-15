@@ -11,8 +11,10 @@ module.exports = {
     await queryInterface.bulkInsert("Users", [
       {
         name: "KepalaRT",
-        phoneNumber: "6281256145759",
+        phoneNumber: "6285246918508",
         role: "superAdmin",
+        image:
+          "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -20,6 +22,8 @@ module.exports = {
         name: "SekretarisRT",
         phoneNumber: "+628236576342564",
         role: "sekretaris",
+        image:
+          "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -27,6 +31,8 @@ module.exports = {
         name: "BendaharaRT",
         phoneNumber: "+628236576342564",
         role: "bendahara",
+        image:
+          "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -34,6 +40,8 @@ module.exports = {
         name: "member RT",
         phoneNumber: "08123276319",
         role: "member",
+        image:
+          "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",
         createdAt: new Date(),
         updatedAt: new Date(),
       },

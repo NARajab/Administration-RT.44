@@ -1,5 +1,4 @@
 const qrcode = require("qrcode-terminal");
-const puppeteer = require("puppeteer");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 
 const client = new Client({
@@ -39,8 +38,12 @@ const sendWelcomeMessage = async (phoneNumber) => {
   const welcomeMessage = "Hai selamat datang! Kenalin Aku Cika bot RT.44";
   await sendTextMessage(phoneNumber, welcomeMessage);
 };
-const sendSuccessMessage = async (phoneNumber) => {
+const sendSuccessMessageForgotePassword = async (phoneNumber) => {
   const welcomeMessage = "Perubahan kata sandi anda berhasil";
+  await sendTextMessage(phoneNumber, welcomeMessage);
+};
+const sendSuccessMessageUpdateProfile = async (phoneNumber) => {
+  const welcomeMessage = "Profil anda telah diperbaharui";
   await sendTextMessage(phoneNumber, welcomeMessage);
 };
 
@@ -48,5 +51,6 @@ module.exports = {
   client,
   sendTextMessage,
   sendWelcomeMessage,
-  sendSuccessMessage,
+  sendSuccessMessageForgotePassword,
+  sendSuccessMessageUpdateProfile,
 };

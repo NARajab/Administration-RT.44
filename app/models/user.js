@@ -36,6 +36,11 @@ module.exports = (sequelize, DataTypes) => {
       placeDateBday: DataTypes.DATE,
       gender: DataTypes.STRING,
       blockHome: DataTypes.STRING,
+      image: {
+        type: DataTypes.STRING,
+        defaultValue:
+          "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",
+      },
       role: {
         type: DataTypes.ENUM([
           "superAdmin",
