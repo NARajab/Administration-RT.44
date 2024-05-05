@@ -3,7 +3,6 @@ const path = require("path");
 const { User, Auth } = require("../models");
 const { Op, where } = require("sequelize");
 
-const { sendSuccessMessageUpdateProfile } = require("../../utils/sendMessage");
 const imagekit = require("../libs/imagekit");
 const ApiError = require("../../utils/apiError");
 

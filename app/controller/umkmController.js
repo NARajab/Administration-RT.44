@@ -1,33 +1,19 @@
 const { Umkm } = require("../models");
-const path = require("path");
 const { Op } = require("sequelize");
 
-const imagekit = require("../libs/imagekit");
 const ApiError = require("../../utils/apiError");
 
 const createUmkm = async (req, res, next) => {
   const umkmBody = req.body;
-  const file = req.file;
-  let image;
-  try {
-    if (file) {
-      const filename = file.originalname;
-      const extension = path.extname(filename);
-      const uploadImage = await imagekit.upload({
-        file: file.buffer,
-        fileName: `IMG-${Date.now()}.${extension}`,
-      });
-      image = uploadImage.url;
-    }
 
+  try {
     const newUmkm = await Umkm.create({
       ...umkmBody,
-      image,
     });
 
     res.status(201).json({
       status: "Success",
-      data: newUmkm,
+      newUmkm,
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
@@ -42,31 +28,20 @@ const updateUmkm = async (req, res, next) => {
     },
   });
   const umkmBody = req.body;
-  const file = req.file;
   const condition = {
     where: {
       id,
     },
     returning: true,
   };
-  let image;
   try {
     if (!umkm) {
       return next(new ApiError("Pengguna tidak ditemukan", 404));
     }
-    if (file) {
-      const filename = file.originalname;
-      const extension = path.extname(filename);
-      const uploadImage = await imagekit.upload({
-        file: file.buffer,
-        fileName: `IMG-${Date.now()}.${extension}`,
-      });
-      image = uploadImage.url;
-    }
+
     const [_, [umkmUpdateData]] = await Umkm.update(
       {
         ...umkmBody,
-        image,
       },
       condition
     );
@@ -104,7 +79,7 @@ const getOnceUmkm = async (req, res, next) => {
         },
       });
     } else {
-      return next(new ApiError("Not found", 404));
+      return next(new ApiError("Umkm tidak ditemukan", 404));
     }
     res.status(200).json({
       status: "Success",

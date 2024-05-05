@@ -18,7 +18,11 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "userId",
         allowNull: false,
       });
-      User.hasMany(models.Dues, {
+      User.hasMany(models.UserDues, {
+        foreignKey: "userId",
+        allowNull: false,
+      });
+      User.hasMany(models.Transaction, {
         foreignKey: {
           name: "userId",
           allowNull: false,

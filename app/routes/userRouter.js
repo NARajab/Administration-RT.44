@@ -12,4 +12,5 @@ router.get("/get/:id?", authMe, checkRole(allowedRoles), User.getOneUser);
 router.post("/create", authMe, checkRole(["sekretaris"]), User.createUser);
 router.patch("/update/:id", authMe, multer.single("image"), User.updateUser);
 router.delete("/delete/:id", authMe, checkRole(allowedRoles), User.deleteUser);
+
 module.exports = router;

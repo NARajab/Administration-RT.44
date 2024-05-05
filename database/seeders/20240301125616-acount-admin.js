@@ -10,6 +10,7 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert("Users", [
       {
+        
         name: "KepalaRT",
         phoneNumber: "6285246918508",
         role: "superAdmin",

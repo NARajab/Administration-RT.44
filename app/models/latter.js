@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       latterType: {
         type: DataTypes.ENUM(["Surat Pengantar", "Surat Keterangan"]),
       },
+      numberLatter: DataTypes.STRING,
       fullName: DataTypes.STRING,
       address: DataTypes.STRING,
       gender: {
@@ -37,6 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       nik: DataTypes.STRING,
       nkk: DataTypes.STRING,
       perpous: DataTypes.STRING,
+      numberFollower: DataTypes.INTEGER,
       destinationAddress: DataTypes.STRING,
     },
     {

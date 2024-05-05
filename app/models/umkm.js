@@ -8,7 +8,10 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Umkm.hasMany(models.ImageUmkm, {
+        foreignKey: "umkmId",
+        allowNull: false,
+      });
     }
   }
   Umkm.init(
@@ -16,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       owner: DataTypes.STRING,
       description: DataTypes.TEXT,
-      image: DataTypes.STRING,
     },
     {
       sequelize,
