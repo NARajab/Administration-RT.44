@@ -1,6 +1,7 @@
 const { Transaction, Dues, UserDues } = require("../models");
 const path = require("path");
 const imagekit = require("../libs/imagekit");
+const { sendSuccessMessageTransaction } = require("../../utils/sendMessage");
 
 const ApiError = require("../../utils/apiError");
 
@@ -9,6 +10,9 @@ const createTransactionObligat = async (req, res, next) => {
   const file = req.file;
   let linkProofPayment;
   try {
+    if (!duesId) {
+      return next(new ApiError("Dues Id Tidak Ditemukan", 404));
+    }
     const dues = await Dues.findByPk(duesId);
 
     if (file) {
@@ -27,6 +31,8 @@ const createTransactionObligat = async (req, res, next) => {
       totalPrice: dues.price,
       linkProofPayment,
     });
+
+    await sendSuccessMessageTransaction(req.user.phoneNumber);
 
     await UserDues.update(
       { duesStatus: true },
@@ -51,6 +57,9 @@ const createTransactionVoluntary = async (req, res, next) => {
   const file = req.file;
   let linkProofPayment;
   try {
+    if (!duesId) {
+      return next(new ApiError("Dues Id Tidak Ditemukan", 404));
+    }
     const dues = await Dues.findByPk(duesId);
 
     if (file) {
@@ -78,6 +87,8 @@ const createTransactionVoluntary = async (req, res, next) => {
         },
       }
     );
+
+    await sendSuccessMessageTransaction(req.user.phoneNumber);
 
     res.status(201).json({
       status: "Success",

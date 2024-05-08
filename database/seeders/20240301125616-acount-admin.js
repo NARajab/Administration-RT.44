@@ -10,7 +10,6 @@ module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert("Users", [
       {
-        
         name: "KepalaRT",
         phoneNumber: "6285246918508",
         role: "superAdmin",
@@ -39,7 +38,7 @@ module.exports = {
       },
       {
         name: "member RT",
-        phoneNumber: "08123276319",
+        phoneNumber: "081253611869",
         role: "member",
         image:
           "https://tse2.mm.bing.net/th?id=OIP.U2iQ7wNK6ZzTW_traW_-PQHaHa&pid=Api&P=0&h=180",

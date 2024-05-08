@@ -5,7 +5,7 @@ const { databaseValidation } = require("../config/database");
 const { createDuesObligat } = require("../app/controller/duesController");
 const WhatsappMessage = require("../app/controller/messageController");
 
-// WhatsappMessage.initializeClient();
+WhatsappMessage.initializeClient();
 databaseValidation();
 
 cron.schedule(

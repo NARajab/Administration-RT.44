@@ -1,13 +1,16 @@
 const qrcode = require("qrcode-terminal");
+const fs = require("fs");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 
 const client = new Client({
-  authStrategy: new LocalAuth(),
-  // webVersionCache: {
-  //   type: "remote",
-  //   remotePath:
-  //     "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
-  // },
+  authStrategy: new LocalAuth({
+    dataPath: "sessions",
+  }),
+  webVersionCache: {
+    type: "remote",
+    remotePath:
+      "https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html",
+  },
 });
 
 client.on("qr", (qr) => {
@@ -50,6 +53,10 @@ const sendSuccessMessageUpdateProfile = async (phoneNumber) => {
   const welcomeMessage = "Profil anda telah diperbaharui";
   await sendTextMessage(phoneNumber, welcomeMessage);
 };
+const sendSuccessMessageTransaction = async (phoneNumber) => {
+  const welcomeMessage = "Pembayaran anda telah berhasil";
+  await sendTextMessage(phoneNumber, welcomeMessage);
+};
 
 module.exports = {
   client,
@@ -57,4 +64,5 @@ module.exports = {
   sendWelcomeMessage,
   sendSuccessMessageForgotePassword,
   sendSuccessMessageUpdateProfile,
+  sendSuccessMessageTransaction,
 };
