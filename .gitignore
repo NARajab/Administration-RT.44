@@ -1,5 +1,4 @@
 .env
-.wwebjs_auth/session
 .wwebjs_auth
 node_modules
 sessions
