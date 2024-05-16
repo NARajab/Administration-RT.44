@@ -39,6 +39,7 @@ const login = async (req, res, next) => {
           id: user.userId,
           name: user.User.name,
           email: user.email,
+          role: user.User.role,
         },
       });
     } else {
@@ -55,6 +56,7 @@ const authenticate = async (req, res, next) => {
       status: "Success",
       data: {
         id: req.user.id,
+        nik: req.user.nik,
         name: req.user.name,
         email: req.user.Auth.email,
         phoneNumber: req.user.phoneNumber,
@@ -64,6 +66,7 @@ const authenticate = async (req, res, next) => {
         gender: req.user.gender,
         blockHome: req.user.blockHome,
         role: req.user.role,
+        image: req.user.image,
       },
     });
   } catch (err) {

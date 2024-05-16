@@ -22,7 +22,9 @@ const getOneUser = async (req, res, next) => {
   let user;
   try {
     if (req.params.id) {
-      user = await User.findByPk(req.params.id);
+      user = await User.findByPk(req.params.id, {
+        include: ["Auth"],
+      });
     } else if (req.query.name) {
       user = await User.findAll({
         where: {
@@ -46,6 +48,9 @@ const createUser = async (req, res, next) => {
     const {
       name,
       email,
+      nik,
+      nkk,
+      member,
       phoneNumber,
       address,
       noHome,
@@ -74,6 +79,9 @@ const createUser = async (req, res, next) => {
       name,
       phoneNumber,
       address,
+      nik,
+      nkk,
+      member,
       noHome,
       placeDateBday,
       gender,
@@ -99,13 +107,7 @@ const createUser = async (req, res, next) => {
 };
 
 const updateUser = async (req, res, next) => {
-  const { id } = req.params;
-  const user = await User.findOne({
-    where: {
-      id,
-    },
-  });
-
+  const id = req.params.id;
   const userBody = req.body;
   const file = req.file;
   const condition = {
@@ -116,10 +118,6 @@ const updateUser = async (req, res, next) => {
   };
   let image;
   try {
-    if (!user) {
-      return next(new ApiError("Pengguna tidak ditemukan", 404));
-    }
-
     if (file) {
       const filename = file.originalname;
       const extension = path.extname(filename);
@@ -130,17 +128,22 @@ const updateUser = async (req, res, next) => {
       image = uploadImage.url;
     }
 
-    const [_, [updatedUserData]] = await User.update(
-      { ...userBody, image },
-      condition
-    );
-    const updatedUser = updatedUserData.toJSON();
+    const updatedUsers = await User.update({ ...userBody, image }, condition);
 
     res.status(200).json({
       status: "Success",
-      data: updatedUser,
+      message: "Pengguna berhasil di update",
+      updatedUsers,
     });
   } catch (err) {
+    if (err.message.split(":")[0] == "notNull Violation") {
+      const errorMessage = err.message
+        .split(":")[1]
+        .split(".")[1]
+        .split(",")[0];
+      next(new ApiError(errorMessage, 400));
+      return;
+    }
     next(new ApiError(err.message, 500));
   }
 };

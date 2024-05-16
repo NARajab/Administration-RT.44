@@ -13,6 +13,7 @@ router.get(
   checkRole(["superAdmin"]),
   Latter.findOnceUserLatter
 );
+router.get("/:userId", Latter.findOnceUserLatterByUserId);
 router.get("/:id", Latter.findOnceLatter);
 router.patch(
   "/update/:id",

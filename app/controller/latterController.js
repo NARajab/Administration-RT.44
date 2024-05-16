@@ -16,13 +16,40 @@ const createLatter = async (req, res, next) => {
       return next(new ApiError("Pengguna tidak ditemukan", 404));
     }
 
+    const currentDate = new Date();
+
+    const day = currentDate.getDate();
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const monthIndex = currentDate.getMonth();
+    const month = monthNames[monthIndex];
+
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year}`;
+
     const newLatter = await Latter.create({
       ...latterBody,
+      date: formattedDate,
     });
 
     const newUserLatter = await UserLatter.create({
       userId: id,
       latterId: newLatter.id,
+      status: "Sedang Proses",
     });
 
     res.status(201).json({
@@ -39,6 +66,24 @@ const findAllUserLatter = async (req, res, next) => {
   try {
     const userLatter = await UserLatter.findAll({
       include: ["Latter", "User"],
+    });
+    res.status(200).json({
+      status: "Success",
+      userLatter,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
+const findOnceUserLatterByUserId = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const userLatter = await UserLatter.findAll({
+      where: {
+        userId,
+      },
+      include: ["Latter"],
     });
     res.status(200).json({
       status: "Success",
@@ -179,6 +224,7 @@ module.exports = {
   updateLatter,
   findAllUserLatter,
   findOnceUserLatter,
+  findOnceUserLatterByUserId,
   findAllLatter,
   findOnceLatter,
 };

@@ -34,10 +34,13 @@ module.exports = (sequelize, DataTypes) => {
     {
       name: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
+      nik: DataTypes.STRING,
+      nkk: DataTypes.STRING,
+      member: DataTypes.STRING,
       address: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
       noHome: DataTypes.STRING,
-      placeDateBday: DataTypes.DATE,
+      placeDateBday: DataTypes.STRING,
       gender: DataTypes.STRING,
       blockHome: DataTypes.STRING,
       image: {

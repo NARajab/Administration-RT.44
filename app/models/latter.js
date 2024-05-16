@@ -19,13 +19,12 @@ module.exports = (sequelize, DataTypes) => {
       latterType: {
         type: DataTypes.ENUM(["Surat Pengantar", "Surat Keterangan"]),
       },
-      numberLatter: DataTypes.STRING,
       fullName: DataTypes.STRING,
       address: DataTypes.STRING,
       gender: {
         type: DataTypes.ENUM(["Pria", "Wanita"]),
       },
-      placeDateBday: DataTypes.DATE,
+      placeDateBday: DataTypes.STRING,
       status: {
         type: DataTypes.ENUM(["Belum Kawin", "Kawin", "Janda/Duda"]),
       },
@@ -40,6 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       perpous: DataTypes.STRING,
       numberFollower: DataTypes.INTEGER,
       destinationAddress: DataTypes.STRING,
+      date: DataTypes.STRING,
     },
     {
       sequelize,

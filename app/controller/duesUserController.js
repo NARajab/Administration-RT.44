@@ -68,6 +68,51 @@ const findAll = async (req, res, next) => {
   }
 };
 
+const findByUserId = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const allDuesUser = await UserDues.findAll({
+      where: {
+        userId: id,
+      },
+      include: ["Dues", "User"],
+    });
+    res.status(200).json({
+      status: "Success",
+      allDuesUser,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
+const findByUserIdDuesId = async (req, res, next) => {
+  try {
+    const { duesId } = req.params;
+
+    const userDues = await UserDues.findOne({
+      where: {
+        userId: req.user.id,
+        duesId,
+      },
+    });
+
+    if (!userDues) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Data tidak ditemukan",
+      });
+    }
+
+    res.status(200).json({
+      status: "Success",
+      userDues,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 const findAllByStatus = async (req, res, next) => {
   try {
     const { duesStatus } = req.query;
@@ -96,4 +141,6 @@ module.exports = {
   createDuesVoluntary,
   findAllByStatus,
   findAll,
+  findByUserId,
+  findByUserIdDuesId,
 };

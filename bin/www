@@ -10,8 +10,9 @@ databaseValidation();
 
 cron.schedule(
   "0 0 1 * *",
-  () => {
+  async () => {
     console.log("Ready......");
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     createDuesObligat();
   },
   {

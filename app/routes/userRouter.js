@@ -7,10 +7,10 @@ const multer = require("../middlewares/upload");
 
 const allowedRoles = ["sekretaris", "superAdmin"];
 
-router.get("/", authMe, checkRole(allowedRoles), User.getAllUsers);
-router.get("/get/:id?", authMe, checkRole(allowedRoles), User.getOneUser);
-router.post("/create", authMe, checkRole(["sekretaris"]), User.createUser);
-router.patch("/update/:id", authMe, multer.single("image"), User.updateUser);
-router.delete("/delete/:id", authMe, checkRole(allowedRoles), User.deleteUser);
+router.get("/", User.getAllUsers);
+router.get("/get/:id?", User.getOneUser);
+router.post("/create", User.createUser);
+router.patch("/update/:id", multer.single("image"), User.updateUser);
+router.delete("/delete/:id", User.deleteUser);
 
 module.exports = router;

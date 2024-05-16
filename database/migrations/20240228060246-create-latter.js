@@ -22,7 +22,7 @@ module.exports = {
         type: Sequelize.ENUM(["Pria", "Wanita"]),
       },
       placeDateBday: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       status: {
         type: Sequelize.ENUM(["Belum Kawin", "Kawin", "Janda/Duda"]),
@@ -49,6 +49,14 @@ module.exports = {
         type: Sequelize.STRING,
       },
       destinationAddress: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      numberFollower: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      date: {
         type: Sequelize.STRING,
       },
       createdAt: {

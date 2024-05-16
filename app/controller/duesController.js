@@ -1,10 +1,11 @@
-const { Dues } = require("../models");
+const { Dues, User, UserDues } = require("../models");
 
 const ApiError = require("../../utils/apiError");
-const { Sequelize } = require("sequelize");
+const { Sequelize, where } = require("sequelize");
 
-const createDuesObligat = async () => {
+const createDuesObligat = async (next) => {
   const now = new Date();
+  const currentYear = now.getFullYear();
   const monthNames = [
     "Januari",
     "Februari",
@@ -22,21 +23,63 @@ const createDuesObligat = async () => {
   const currentMonthName = monthNames[now.getMonth()];
 
   const duesData = {
-    duesName: `Iuran Bulan ${currentMonthName}`,
-    duesType: "Wajib/Sosial",
+    duesName: `${currentMonthName} ${currentYear}`,
+    duesType: "Wajib",
     price: 150000,
   };
+
+  let createdDues;
   try {
-    await Dues.create(duesData);
+    createdDues = await Dues.create(duesData);
+
+    const users = await User.findAll();
+
+    await Promise.all(
+      users.map(async (user) => {
+        await UserDues.create({
+          userId: user.id,
+          duesId: createdDues.id,
+        });
+      })
+    );
   } catch (err) {
     next(new ApiError(err.message, 500));
   }
 };
-
 const createDuesVoluntary = async (req, res, next) => {
   const { duesName } = req.body;
   try {
-    const newDues = await Dues.create({ duesName, duesType: "Sukarela" });
+    const currentDate = new Date();
+
+    const day = currentDate.getDate();
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const monthIndex = currentDate.getMonth();
+    const month = monthNames[monthIndex];
+
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year}`;
+
+    const newDues = await Dues.create({
+      duesName,
+      duesType: "Sukarela",
+      price: 0,
+      date: formattedDate,
+    });
     res.status(201).json({
       status: "Success",
       newDues,
@@ -46,13 +89,17 @@ const createDuesVoluntary = async (req, res, next) => {
   }
 };
 
-const findAllDues = async (req, res, next) => {
+const findDuesByType = async (req, res, next) => {
   try {
-    const allDues = await Dues.findAll();
+    const duesSukarela = await Dues.findAll({
+      where: {
+        duesType: "Sukarela",
+      },
+    });
 
     res.status(200).json({
       status: "Success",
-      allDues,
+      duesSukarela,
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
@@ -94,6 +141,6 @@ const findAllDuesByMonth = async (req, res, next) => {
 module.exports = {
   createDuesObligat,
   createDuesVoluntary,
-  findAllDues,
+  findDuesByType,
   findAllDuesByMonth,
 };

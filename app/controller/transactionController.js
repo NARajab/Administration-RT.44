@@ -13,6 +13,9 @@ const createTransactionObligat = async (req, res, next) => {
     if (!duesId) {
       return next(new ApiError("Dues Id Tidak Ditemukan", 404));
     }
+    if (!file) {
+      return next(new ApiError("Masukkan bukti pembayaran", 404));
+    }
     const dues = await Dues.findByPk(duesId);
 
     if (file) {
@@ -25,11 +28,37 @@ const createTransactionObligat = async (req, res, next) => {
       linkProofPayment = uploadImage.url;
     }
 
+    const currentDate = new Date();
+
+    const day = currentDate.getDate();
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const monthIndex = currentDate.getMonth();
+    const month = monthNames[monthIndex];
+
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year}`;
+
     const newTransaction = await Transaction.create({
       userId: req.user.id,
       duesId: dues.id,
       totalPrice: dues.price,
       linkProofPayment,
+      date: formattedDate,
     });
 
     await sendSuccessMessageTransaction(req.user.phoneNumber);
@@ -72,11 +101,37 @@ const createTransactionVoluntary = async (req, res, next) => {
       linkProofPayment = uploadImage.url;
     }
 
+    const currentDate = new Date();
+
+    const day = currentDate.getDate();
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const monthIndex = currentDate.getMonth();
+    const month = monthNames[monthIndex];
+
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year}`;
+
     const newTransaction = await Transaction.create({
       userId: req.user.id,
       duesId: dues.id,
       totalPrice: totalPrice,
       linkProofPayment,
+      date: formattedDate,
     });
 
     await UserDues.update(
