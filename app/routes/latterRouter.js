@@ -15,11 +15,13 @@ router.get(
 );
 router.get("/:userId", Latter.findOnceUserLatterByUserId);
 router.get("/:id", Latter.findOnceLatter);
+router.get("/userlatter/status", Latter.findByStatus);
 router.patch(
   "/update/:id",
   authMe,
   checkRole(["superAdmin"]),
   Latter.updateLatter
 );
+router.patch("/update/status/:latterId", Latter.updateStatus);
 
 module.exports = router;

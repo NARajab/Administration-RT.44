@@ -7,18 +7,15 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-      Umkm.hasMany(models.ImageUmkm, {
-        foreignKey: "umkmId",
-        allowNull: false,
-      });
-    }
+    static associate(models) {}
   }
   Umkm.init(
     {
       name: DataTypes.STRING,
       owner: DataTypes.STRING,
+      noUmkm: DataTypes.STRING,
       description: DataTypes.TEXT,
+      imageUrl: DataTypes.STRING,
     },
     {
       sequelize,

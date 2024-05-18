@@ -67,9 +67,17 @@ const findAllUserLatter = async (req, res, next) => {
     const userLatter = await UserLatter.findAll({
       include: ["Latter", "User"],
     });
+    const latterProcessCount = userLatter.filter(
+      (latter) => latter.status === "Sedang Proses"
+    ).length;
+    const latterDoneCount = userLatter.filter(
+      (latter) => latter.status === "Selesai"
+    ).length;
     res.status(200).json({
       status: "Success",
       userLatter,
+      latterProcessCount,
+      latterDoneCount,
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
@@ -152,6 +160,22 @@ const findOnceUserLatter = async (req, res, next) => {
   }
 };
 
+const findByStatus = async (req, res, next) => {
+  try {
+    const latter = await UserLatter.findAll({
+      where: {
+        status: "Sedang Proses",
+      },
+    });
+    res.status(200).json({
+      status: "Success",
+      latter,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 const updateLatter = async (req, res, next) => {
   const { id } = req.params;
   const latter = await Latter.findOne({
@@ -219,11 +243,34 @@ const findOnceLatter = async (req, res, next) => {
   }
 };
 
+const updateStatus = async (req, res, next) => {
+  const { latterId } = req.params;
+  const statusBody = req.body;
+  const userLatter = await UserLatter.findOne({
+    where: {
+      latterId,
+    },
+  });
+  try {
+    if (!userLatter) {
+      return next(new ApiError("UserLatter tidak ditemukan", 404));
+    }
+    await userLatter.update({ ...statusBody });
+    res.status(200).json({
+      status: "Success",
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   createLatter,
   updateLatter,
+  updateStatus,
   findAllUserLatter,
   findOnceUserLatter,
+  findByStatus,
   findOnceUserLatterByUserId,
   findAllLatter,
   findOnceLatter,
