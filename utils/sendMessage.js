@@ -57,6 +57,50 @@ const sendSuccessMessageTransaction = async (phoneNumber) => {
   const welcomeMessage = "Pembayaran anda telah berhasil";
   await sendTextMessage(phoneNumber, welcomeMessage);
 };
+const sendMessageDues = async (phoneNumber) => {
+  const welcomeMessage = `
+📢 [Penting] Pengingat Pembayaran Iuran Bulanan RT 44 📢
+
+Halo warga RT 44 yang terhormat,
+
+Kami ingin mengingatkan kepada seluruh warga RT 44 untuk segera melakukan pembayaran iuran bulanan.
+
+Terima kasih atas perhatiannya dan partisipasi aktif Anda dalam mendukung kegiatan RT 44!
+
+Salam hangat,
+[Ketua RT 44]
+`;
+  await sendTextMessage(phoneNumber, welcomeMessage);
+};
+const sendMessageLatterToRt = async (phoneNumber) => {
+  const welcomeMessage = `
+📢 Pemberitahuan Surat Belum Diverifikasi 📢
+
+Halo Pak RT yang terhormat,
+
+Kami ingin memberitahukan bahwa terdapat surat yang belum diverifikasi oleh Anda.
+
+Mohon segera melakukan verifikasi terhadap surat yang belum diverifikasi agar dapat segera diproses.
+
+Salam hangat,
+[Warga RT 44]
+`;
+  await sendTextMessage(phoneNumber, welcomeMessage);
+};
+
+const sendMessageToWarga = async (phoneNumber) => {
+  const message = `
+📢 Pemberitahuan Surat Sudah Diverifikasi 📢
+
+Halo Warga RT 44 yang terhormat,
+
+Kami ingin memberitahukan bahwa surat Anda telah diverifikasi dan diproses dengan segera.
+
+Salam hangat,
+[Ketua RT 44]
+`;
+  await sendTextMessage(phoneNumber, message);
+};
 
 module.exports = {
   client,
@@ -65,4 +109,7 @@ module.exports = {
   sendSuccessMessageForgotePassword,
   sendSuccessMessageUpdateProfile,
   sendSuccessMessageTransaction,
+  sendMessageDues,
+  sendMessageLatterToRt,
+  sendMessageToWarga,
 };

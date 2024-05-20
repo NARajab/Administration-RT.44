@@ -3,6 +3,8 @@ const { Dues, User, UserDues } = require("../models");
 const ApiError = require("../../utils/apiError");
 const { Sequelize, where } = require("sequelize");
 
+const { sendMessageDues } = require("../../utils/sendMessage");
+
 const createDuesObligat = async (next) => {
   const now = new Date();
   const currentYear = now.getFullYear();
@@ -32,7 +34,11 @@ const createDuesObligat = async (next) => {
   try {
     createdDues = await Dues.create(duesData);
 
-    const users = await User.findAll();
+    const users = await User.findAll({
+      where: {
+        role: "member",
+      },
+    });
 
     await Promise.all(
       users.map(async (user) => {
@@ -40,6 +46,13 @@ const createDuesObligat = async (next) => {
           userId: user.id,
           duesId: createdDues.id,
         });
+      })
+    );
+
+    const memberPhoneNumbers = users.map((user) => user.phoneNumber);
+    await Promise.all(
+      memberPhoneNumbers.map(async (phoneNumber) => {
+        await sendMessageDues(phoneNumber);
       })
     );
   } catch (err) {
@@ -138,9 +151,23 @@ const findAllDuesByMonth = async (req, res, next) => {
   }
 };
 
+const findAll = async (req, res, next) => {
+  try {
+    const allDues = await Dues.findAll();
+
+    res.status(200).json({
+      status: "Success",
+      allDues,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   createDuesObligat,
   createDuesVoluntary,
   findDuesByType,
   findAllDuesByMonth,
+  findAll,
 };

@@ -5,7 +5,7 @@ const multer = require("../middlewares/upload");
 const authMe = require("../middlewares/authentication");
 
 router.post(
-  "/obligat/:duesId",
+  "/obligat/:duesId/:userId",
   authMe,
   multer.single("linkProofPayment"),
   Transaction.createTransactionObligat
@@ -16,6 +16,7 @@ router.post(
   multer.single("linkProofPayment"),
   Transaction.createTransactionVoluntary
 );
+router.patch("/update-verify/:id", Transaction.updateVerify);
 router.get("/", Transaction.findAllTransaction);
 
 module.exports = router;

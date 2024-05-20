@@ -6,7 +6,7 @@ const checkRole = require("../middlewares/checkRole");
 
 router.post("/create/:id", Latter.createLatter);
 router.get("/userlatter", Latter.findAllUserLatter);
-router.get("/", authMe, checkRole(["superAdmin"]), Latter.findAllLatter);
+router.get("/", Latter.findAllLatter);
 router.get(
   "/get/:userId?/:latterId?",
   authMe,
@@ -14,14 +14,9 @@ router.get(
   Latter.findOnceUserLatter
 );
 router.get("/:userId", Latter.findOnceUserLatterByUserId);
-router.get("/:id", Latter.findOnceLatter);
+router.get("/getLetter/:id", Latter.findOnceLatter);
 router.get("/userlatter/status", Latter.findByStatus);
-router.patch(
-  "/update/:id",
-  authMe,
-  checkRole(["superAdmin"]),
-  Latter.updateLatter
-);
+router.patch("/update/:id", Latter.updateLatter);
 router.patch("/update/status/:latterId", Latter.updateStatus);
 
 module.exports = router;

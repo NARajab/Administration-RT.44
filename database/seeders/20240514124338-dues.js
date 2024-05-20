@@ -44,7 +44,11 @@ module.exports = {
         duesDataArray.map((duesData) => Dues.create(duesData))
       );
 
-      const users = await User.findAll();
+      const users = await User.findAll({
+        where: {
+          role: "member",
+        },
+      });
 
       const userDuesPromises = [];
       for (const createdDues of createdDuesArray) {

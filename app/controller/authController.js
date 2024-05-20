@@ -147,12 +147,12 @@ const updateNewPassword = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { email } = req.query;
     const { password, confirmPassword } = req.body;
 
     const users = await Auth.findOne({
       where: {
-        userId,
+        email,
       },
       include: ["User"],
     });
@@ -180,7 +180,7 @@ const forgotPassword = async (req, res, next) => {
       },
       {
         where: {
-          userId,
+          email,
         },
       }
     );

@@ -86,6 +86,44 @@ const findByUserId = async (req, res, next) => {
   }
 };
 
+const findByTrue = async (req, res, next) => {
+  try {
+    const allDuesUser = await UserDues.findAll({
+      where: {
+        duesStatus: true,
+      },
+      include: ["Dues", "User"],
+    });
+    const duesCount = allDuesUser.length;
+    res.status(200).json({
+      status: "Success",
+      allDuesUser,
+      duesCount,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
+const findByFalse = async (req, res, next) => {
+  try {
+    const allDuesUser = await UserDues.findAll({
+      where: {
+        duesStatus: false,
+      },
+      include: ["Dues", "User"],
+    });
+    const duesCount = allDuesUser.length;
+    res.status(200).json({
+      status: "Success",
+      allDuesUser,
+      duesCount,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 const findByUserIdDuesId = async (req, res, next) => {
   try {
     const { duesId } = req.params;
@@ -143,4 +181,6 @@ module.exports = {
   findAll,
   findByUserId,
   findByUserIdDuesId,
+  findByTrue,
+  findByFalse,
 };

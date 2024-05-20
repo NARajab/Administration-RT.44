@@ -3,6 +3,11 @@ const { Op } = require("sequelize");
 
 const ApiError = require("../../utils/apiError");
 
+const {
+  sendMessageLatterToRt,
+  sendMessageToWarga,
+} = require("../../utils/sendMessage");
+
 const createLatter = async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findOne({
@@ -51,6 +56,13 @@ const createLatter = async (req, res, next) => {
       latterId: newLatter.id,
       status: "Sedang Proses",
     });
+
+    const pakRT = await User.findOne({
+      where: {
+        role: "superAdmin",
+      },
+    });
+    await sendMessageLatterToRt(pakRT.phoneNumber);
 
     res.status(201).json({
       status: "Success",
@@ -255,7 +267,21 @@ const updateStatus = async (req, res, next) => {
     if (!userLatter) {
       return next(new ApiError("UserLatter tidak ditemukan", 404));
     }
+    const userId = userLatter.userId;
+
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      return next(new ApiError("Pengguna tidak ditemukan", 404));
+    }
+    const phoneNumber = user.phoneNumber;
     await userLatter.update({ ...statusBody });
+
+    await sendMessageToWarga(phoneNumber);
+
     res.status(200).json({
       status: "Success",
     });

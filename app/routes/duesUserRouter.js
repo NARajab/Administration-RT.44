@@ -12,5 +12,7 @@ router.get(
   authMe,
   DuesUserController.findByUserIdDuesId
 );
+router.get("/by-true", DuesUserController.findByTrue);
+router.get("/by-false", DuesUserController.findByFalse);
 
 module.exports = router;
