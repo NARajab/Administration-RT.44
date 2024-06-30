@@ -27,7 +27,7 @@ const createDuesObligat = async (next) => {
   const duesData = {
     duesName: `${currentMonthName} ${currentYear}`,
     duesType: "Wajib",
-    price: 150000,
+    price: 160000,
   };
 
   let createdDues;

@@ -20,7 +20,13 @@ client.on("qr", (qr) => {
 client.on("ready", () => {
   console.log("Client is ready!");
 });
+client.on("error", (error) => {
+  console.error("Client Error:", error);
+});
 
+client.on("disconnected", (reason) => {
+  console.log("Client was logged out", reason);
+});
 const sendTextMessage = async (phoneNumber, message) => {
   try {
     let phoneNumberNew;
@@ -41,10 +47,6 @@ const sendTextMessage = async (phoneNumber, message) => {
   }
 };
 
-const sendWelcomeMessage = async (phoneNumber) => {
-  const welcomeMessage = "Hai selamat datang! Kenalin Aku Cika bot RT.44";
-  await sendTextMessage(phoneNumber, welcomeMessage);
-};
 const sendSuccessMessageForgotePassword = async (phoneNumber) => {
   const welcomeMessage = "Perubahan kata sandi anda berhasil";
   await sendTextMessage(phoneNumber, welcomeMessage);
@@ -105,7 +107,6 @@ Salam hangat,
 module.exports = {
   client,
   sendTextMessage,
-  sendWelcomeMessage,
   sendSuccessMessageForgotePassword,
   sendSuccessMessageUpdateProfile,
   sendSuccessMessageTransaction,
