@@ -1,15 +1,16 @@
 {
   "version": 2,
+  "public": true,
   "builds": [
     {
       "src": "bin/www",
       "use": "@vercel/node"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/(.*)",
-      "dest": "bin/www"
+      "source": "/(.*)",
+      "destination": "bin/www"
     }
   ]
 }
