@@ -196,9 +196,33 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+const cekEmail = async (req, res, next) => {
+  try {
+    const { email } = req.query;
+
+    const users = await Auth.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!users) {
+      return next(new ApiError("Email tidak ditemukan", 404));
+    }
+
+    res.status(200).json({
+      status: "Success",
+      users,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   login,
   authenticate,
   updateNewPassword,
   forgotPassword,
+  cekEmail,
 };
