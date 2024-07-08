@@ -18,7 +18,10 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
-      image: {
+      noUmkm: {
+        type: Sequelize.STRING,
+      },
+      imageUrl: {
         type: Sequelize.STRING,
       },
       createdAt: {

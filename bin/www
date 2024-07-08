@@ -5,13 +5,14 @@ const { databaseValidation } = require("../config/database");
 const { createDuesObligat } = require("../app/controller/duesController");
 const WhatsappMessage = require("../app/controller/messageController");
 
-WhatsappMessage.initializeClient();
+// WhatsappMessage.initializeClient();
 databaseValidation();
 
 cron.schedule(
   "0 0 1 * *",
-  () => {
+  async () => {
     console.log("Ready......");
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     createDuesObligat();
   },
   {

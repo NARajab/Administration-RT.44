@@ -28,8 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       duesName: DataTypes.STRING,
       duesType: {
-        type: DataTypes.ENUM(["Wajib/Sosial", "Sukarela"]),
+        type: DataTypes.ENUM(["Wajib", "Sukarela"]),
       },
+      date: { type: DataTypes.STRING, allowNull: true },
       price: DataTypes.FLOAT,
     },
     {

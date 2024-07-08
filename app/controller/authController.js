@@ -39,6 +39,7 @@ const login = async (req, res, next) => {
           id: user.userId,
           name: user.User.name,
           email: user.email,
+          role: user.User.role,
         },
       });
     } else {
@@ -55,6 +56,7 @@ const authenticate = async (req, res, next) => {
       status: "Success",
       data: {
         id: req.user.id,
+        nik: req.user.nik,
         name: req.user.name,
         email: req.user.Auth.email,
         phoneNumber: req.user.phoneNumber,
@@ -64,6 +66,7 @@ const authenticate = async (req, res, next) => {
         gender: req.user.gender,
         blockHome: req.user.blockHome,
         role: req.user.role,
+        image: req.user.image,
       },
     });
   } catch (err) {
@@ -144,12 +147,12 @@ const updateNewPassword = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
   try {
-    const { userId } = req.params;
+    const { email } = req.query;
     const { password, confirmPassword } = req.body;
 
     const users = await Auth.findOne({
       where: {
-        userId,
+        email,
       },
       include: ["User"],
     });
@@ -177,7 +180,7 @@ const forgotPassword = async (req, res, next) => {
       },
       {
         where: {
-          userId,
+          email,
         },
       }
     );
@@ -193,9 +196,33 @@ const forgotPassword = async (req, res, next) => {
   }
 };
 
+const cekEmail = async (req, res, next) => {
+  try {
+    const { email } = req.query;
+
+    const users = await Auth.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!users) {
+      return next(new ApiError("Email tidak ditemukan", 404));
+    }
+
+    res.status(200).json({
+      status: "Success",
+      users,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   login,
   authenticate,
   updateNewPassword,
   forgotPassword,
+  cekEmail,
 };

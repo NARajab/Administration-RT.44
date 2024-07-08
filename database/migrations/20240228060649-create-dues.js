@@ -13,10 +13,14 @@ module.exports = {
         type: Sequelize.STRING,
       },
       duesType: {
-        type: Sequelize.ENUM(["Wajib/Sosial", "Sukarela"]),
+        type: Sequelize.ENUM(["Wajib", "Sukarela"]),
       },
       price: {
         type: Sequelize.FLOAT,
+      },
+      date: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

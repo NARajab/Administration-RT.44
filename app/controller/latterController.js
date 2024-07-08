@@ -3,6 +3,11 @@ const { Op } = require("sequelize");
 
 const ApiError = require("../../utils/apiError");
 
+const {
+  sendMessageLatterToRt,
+  sendMessageToWarga,
+} = require("../../utils/sendMessage");
+
 const createLatter = async (req, res, next) => {
   const { id } = req.params;
   const user = await User.findOne({
@@ -16,14 +21,48 @@ const createLatter = async (req, res, next) => {
       return next(new ApiError("Pengguna tidak ditemukan", 404));
     }
 
+    const currentDate = new Date();
+
+    const day = currentDate.getDate();
+
+    const monthNames = [
+      "Januari",
+      "Februari",
+      "Maret",
+      "April",
+      "Mei",
+      "Juni",
+      "Juli",
+      "Agustus",
+      "September",
+      "Oktober",
+      "November",
+      "Desember",
+    ];
+    const monthIndex = currentDate.getMonth();
+    const month = monthNames[monthIndex];
+
+    const year = currentDate.getFullYear();
+
+    const formattedDate = `${day} ${month} ${year}`;
+
     const newLatter = await Latter.create({
       ...latterBody,
+      date: formattedDate,
     });
 
     const newUserLatter = await UserLatter.create({
       userId: id,
       latterId: newLatter.id,
+      status: "Sedang Proses",
     });
+
+    const pakRT = await User.findOne({
+      where: {
+        role: "superAdmin",
+      },
+    });
+    await sendMessageLatterToRt(pakRT.phoneNumber);
 
     res.status(201).json({
       status: "Success",
@@ -39,6 +78,32 @@ const findAllUserLatter = async (req, res, next) => {
   try {
     const userLatter = await UserLatter.findAll({
       include: ["Latter", "User"],
+    });
+    const latterProcessCount = userLatter.filter(
+      (latter) => latter.status === "Sedang Proses"
+    ).length;
+    const latterDoneCount = userLatter.filter(
+      (latter) => latter.status === "Selesai"
+    ).length;
+    res.status(200).json({
+      status: "Success",
+      userLatter,
+      latterProcessCount,
+      latterDoneCount,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
+const findOnceUserLatterByUserId = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const userLatter = await UserLatter.findAll({
+      where: {
+        userId,
+      },
+      include: ["Latter"],
     });
     res.status(200).json({
       status: "Success",
@@ -101,6 +166,22 @@ const findOnceUserLatter = async (req, res, next) => {
     res.status(200).json({
       status: "Success",
       userLatter,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
+const findByStatus = async (req, res, next) => {
+  try {
+    const latter = await UserLatter.findAll({
+      where: {
+        status: "Sedang Proses",
+      },
+    });
+    res.status(200).json({
+      status: "Success",
+      latter,
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
@@ -174,11 +255,49 @@ const findOnceLatter = async (req, res, next) => {
   }
 };
 
+const updateStatus = async (req, res, next) => {
+  const { latterId } = req.params;
+  const statusBody = req.body;
+  const userLatter = await UserLatter.findOne({
+    where: {
+      latterId,
+    },
+  });
+  try {
+    if (!userLatter) {
+      return next(new ApiError("UserLatter tidak ditemukan", 404));
+    }
+    const userId = userLatter.userId;
+
+    const user = await User.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
+      return next(new ApiError("Pengguna tidak ditemukan", 404));
+    }
+    const phoneNumber = user.phoneNumber;
+    await userLatter.update({ ...statusBody });
+
+    await sendMessageToWarga(phoneNumber);
+
+    res.status(200).json({
+      status: "Success",
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   createLatter,
   updateLatter,
+  updateStatus,
   findAllUserLatter,
   findOnceUserLatter,
+  findByStatus,
+  findOnceUserLatterByUserId,
   findAllLatter,
   findOnceLatter,
 };

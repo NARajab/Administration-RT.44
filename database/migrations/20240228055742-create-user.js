@@ -12,6 +12,15 @@ module.exports = {
       name: {
         type: Sequelize.STRING,
       },
+      nik: {
+        type: Sequelize.STRING,
+      },
+      nkk: {
+        type: Sequelize.STRING,
+      },
+      member: {
+        type: Sequelize.STRING,
+      },
       phoneNumber: {
         type: Sequelize.STRING,
       },
@@ -22,7 +31,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       placeDateBday: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       gender: {
         type: Sequelize.STRING,

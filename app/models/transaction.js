@@ -29,6 +29,8 @@ module.exports = (sequelize, DataTypes) => {
       duesId: DataTypes.INTEGER,
       totalPrice: DataTypes.FLOAT,
       linkProofPayment: DataTypes.STRING,
+      date: DataTypes.STRING,
+      verified: { type: DataTypes.BOOLEAN, defaultValue: false },
     },
     {
       sequelize,

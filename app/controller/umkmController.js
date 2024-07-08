@@ -1,14 +1,27 @@
 const { Umkm } = require("../models");
 const { Op } = require("sequelize");
+const path = require("path");
 
+const imagekit = require("../libs/imagekit");
 const ApiError = require("../../utils/apiError");
 
 const createUmkm = async (req, res, next) => {
   const umkmBody = req.body;
-
+  const file = req.file;
+  let imageUrl;
   try {
+    if (file) {
+      const filename = file.originalname;
+      const extension = path.extname(filename);
+      const uploadImage = await imagekit.upload({
+        file: file.buffer,
+        fileName: `IMG-${Date.now()}.${extension}`,
+      });
+      imageUrl = uploadImage.url;
+    }
     const newUmkm = await Umkm.create({
       ...umkmBody,
+      imageUrl,
     });
 
     res.status(201).json({
@@ -21,34 +34,36 @@ const createUmkm = async (req, res, next) => {
 };
 
 const updateUmkm = async (req, res, next) => {
-  const { id } = req.params;
-  const umkm = await Umkm.findOne({
-    where: {
-      id,
-    },
-  });
+  const id = req.params.id;
   const umkmBody = req.body;
+  const file = req.file;
   const condition = {
     where: {
       id,
     },
     returning: true,
   };
+  let imageUrl;
   try {
-    if (!umkm) {
-      return next(new ApiError("Pengguna tidak ditemukan", 404));
+    if (file) {
+      const filename = file.originalname;
+      const extension = path.extname(filename);
+      const uploadImage = await imagekit.upload({
+        file: file.buffer,
+        fileName: `IMG-${Date.now()}.${extension}`,
+      });
+      imageUrl = uploadImage.url;
     }
-
-    const [_, [umkmUpdateData]] = await Umkm.update(
+    const umkmUpdated = await Umkm.update(
       {
         ...umkmBody,
+        imageUrl,
       },
       condition
     );
-    const umkmUpdate = umkmUpdateData.toJSON();
     res.status(201).json({
       status: "Success",
-      data: umkmUpdate,
+      umkmUpdated,
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
@@ -90,9 +105,28 @@ const getOnceUmkm = async (req, res, next) => {
   }
 };
 
+const deleteUmkm = async (req, res, next) => {
+  const id = req.params.id;
+  try {
+    const deletedUmkm = await Umkm.destroy({
+      where: {
+        id,
+      },
+    });
+    res.status(200).json({
+      status: "Success",
+      message: "Berhasil menghapus UMKM",
+      deletedUmkm,
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   createUmkm,
   getAllUmkm,
   getOnceUmkm,
   updateUmkm,
+  deleteUmkm,
 };

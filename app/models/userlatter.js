@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: DataTypes.INTEGER,
       latterId: DataTypes.INTEGER,
+      status: {
+        type: DataTypes.ENUM(["Selesai", "Sedang Proses", "Ditolak"]),
+        defaultValue: false,
+      },
     },
     {
       sequelize,
