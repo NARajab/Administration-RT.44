@@ -7,7 +7,7 @@
       "use": "@vercel/node"
     }
   ],
-  "rewrites": [
+  "route": [
     {
       "source": "/(.*)",
       "destination": "bin/www"
