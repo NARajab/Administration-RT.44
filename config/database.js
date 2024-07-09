@@ -1,16 +1,15 @@
 const Sequelize = require("sequelize");
+require("dotenv").config();
 
 const {
-  DB_USERNAME = "",
+  DB_USERNAME = "u852092425_gadingcity",
   DB_PASSWORD = "",
-  DB_NAME = "",
-  // DB_HOST = "localhost",
-  // DB_PORT = "3306",
+  DB_NAME = "u852092425_RT44gadingcity",
+  DB_HOST = "153.92.15.29",
 } = process.env;
 
 const sequelize = new Sequelize(DB_NAME, DB_USERNAME, DB_PASSWORD, {
-  // host: DB_HOST,
-  // port: DB_PORT,
+  host: DB_HOST,
   dialect: "mysql",
 });
 
@@ -29,24 +28,21 @@ module.exports = {
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_NAME,
-    // host: DB_HOST,
-    // port: DB_PORT,
-    dialect: "mysql", // use 'mysql' for MySQL
+    host: DB_HOST,
+    dialect: "mysql",
   },
   test: {
     username: DB_USERNAME,
     password: DB_PASSWORD,
-    database: `${DB_NAME}_test`,
-    // host: DB_HOST,
-    // port: DB_PORT,
-    dialect: "mysql", // use 'mysql' for MySQL
+    database: DB_NAME,
+    host: DB_HOST,
+    dialect: "mysql",
   },
   production: {
     username: DB_USERNAME,
     password: DB_PASSWORD,
     database: DB_NAME,
-    // host: DB_HOST,
-    // port: DB_PORT,
-    dialect: "mysql", // use 'mysql' for MySQL
+    host: DB_HOST,
+    dialect: "mysql",
   },
 };
