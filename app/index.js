@@ -15,6 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 app.use(router);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.all("*", (req, res, next) => {
   next(new ApiError("Routes does not exist", 404));
 });
