@@ -44,8 +44,7 @@
     "sequelize-cli": "^6.6.2",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0",
-    "vercel": "^34.3.0",
-    "whatsapp-web.js": "^1.23.0",
-    "ws": "^8.17.1"
+    "vercel": "^32.3.0",
+    "whatsapp-web.js": "^1.23.0"
   }
 }
