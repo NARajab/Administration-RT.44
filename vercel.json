@@ -11,8 +11,8 @@
   ],
   "routes": [
     {
-      "source": "/(.*)",
-      "destination": "/bin/www"
+      "src": "/(.*)",
+      "des": "/bin/www"
     }
   ]
 }
