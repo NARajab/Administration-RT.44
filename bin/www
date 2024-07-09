@@ -5,24 +5,31 @@ const { databaseValidation } = require("../config/database");
 const { createDuesObligat } = require("../app/controller/duesController");
 const WhatsappMessage = require("../app/controller/messageController");
 
-// WhatsappMessage.initializeClient();
-databaseValidation();
+console.log("Starting server...");
 
-cron.schedule(
-  "0 0 1 * *",
-  async () => {
-    console.log("Ready......");
-    await new Promise((resolve) => setTimeout(resolve, 5000));
-    createDuesObligat();
-  },
-  {
-    scheduled: true,
-    timezone: "Asia/Jakarta",
-  }
-);
+databaseValidation().then(() => {
+  console.log("Database validation complete.");
+  // Uncomment this if you need WhatsappMessage initialization
+  // WhatsappMessage.initializeClient();
 
-const { PORT = 3000, HOST } = process.env;
+  cron.schedule(
+    "0 0 1 * *",
+    async () => {
+      console.log("Cron job started...");
+      await new Promise((resolve) => setTimeout(resolve, 5000));
+      createDuesObligat();
+    },
+    {
+      scheduled: true,
+      timezone: "Asia/Jakarta",
+    }
+  );
 
-app.listen(PORT, () => {
-  console.log(`Local is running : http://${HOST}:${PORT}`);
+  const { PORT = 3000, HOST = 'localhost' } = process.env;
+
+  app.listen(PORT, () => {
+    console.log(`Server is running at http://${HOST}:${PORT}`);
+  });
+}).catch(err => {
+  console.error("Failed to validate database connection:", err);
 });
