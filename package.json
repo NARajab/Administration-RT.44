@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build": "npm install && npm run dev",
     "db:drop": "sequelize db:drop",
     "db:create": "sequelize db:create",
     "db:migrate": "sequelize db:migrate",
