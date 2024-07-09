@@ -1,3 +1,5 @@
+console.log("Executing bin/www...");
+
 require("dotenv").config();
 const cron = require("node-cron");
 const app = require("../app/index");
